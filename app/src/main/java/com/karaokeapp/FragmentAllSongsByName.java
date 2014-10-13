@@ -1,55 +1,31 @@
 package com.karaokeapp;
 
-import java.util.Locale;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.SearchView;
 
 @SuppressLint("NewApi")
 public class FragmentAllSongsByName extends Fragment {
-	private GridAdapter mAdapter;
-	private MenuItem mSearchItem;
-	
-	private static final String TAG = FragmentAllSongsByArtist.class.getSimpleName();
+    private GridAdapter mAdapter;
+    private MenuItem mSearchItem;
 
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setHasOptionsMenu(true);
-		View view = inflater.inflate(R.layout.fragment_all_songs_by_name, container, false);
-		GridView mGvSong = (GridView) view.findViewById(R.id.gv_song_by_name);
-//		mAdapter = new GridAdapter(view.getContext(), DataManager.getSongsList(view.getContext(), TAG));
-//		mGvSong.setAdapter(mAdapter);
-//		mGvSong.setOnItemClickListener(new GridView.OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				
-//				
-//				Song choosedSong = (Song) mAdapter.getItem(position);
-//				DialogFragmentSongDetails songFragment = DialogFragmentSongDetails
-//						.getInstance(choosedSong);
-//				songFragment.show(getFragmentManager(), "Dialog fragment Song Details");				
-//			}
-//		
-//		});
-//		
-//
-//
-		return view;
-	}
-	
+    private static final String TAG = FragmentAllSongsByArtist.class.getSimpleName();
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        View view = inflater.inflate(R.layout.fragment_all_songs_by_name, container, false);
+        GridView mGvSong = (GridView) view.findViewById(R.id.gv_song_by_name);
+        return view;
+    }
+
 //	@Override
 //	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //		inflater.inflate(R.menu.activity_main_actions, menu);

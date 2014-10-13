@@ -1,110 +1,120 @@
 package com.karaokeapp;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.widget.Toast;
+import android.util.Log;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataManager {
-	
-	private static final int ID_POSITION = 0;
-	private static final int ARTIST_POSITION = 1;
-	private static final int SONG_NAME_POSITION = 2;
-	private static final int ALBUM_COVER_POSITION = 3;
-	private static final int DURATION_POSITION = 4;
-	private static final int LYRIC_POSITION = 5;
-	private static final int REMARKS_POSITION = 6;
-	private static final int VERSION_POSITION = 7;
-	private static final String ALL_SONGS_TAG = "FragmentAllSongsByArtist";
-	private static final String FAVORITES_SONGS_TAG = "FragmentFavoritesSongs";
-	private static final String FILE_NAME_FAVORITES = "data_songs_favorites.csv";
-	private static File file;
-	  
-	public static ArrayList<Song> getSongsList(Context context, String TAG){
-		String [] next = {};
-		Drawable albumCover;
-		Drawable albumCoverDefault = context.getResources().getDrawable(R.drawable.defcover);
-		ArrayList<Song> list= new ArrayList<Song>();
-		Song song;
-		file = new File(context.getExternalFilesDir("data"), FILE_NAME_FAVORITES);
 
-		
-		CSVReader csvReader = null;
-		try {
-				if (TAG.equals(ALL_SONGS_TAG)){
-					csvReader = new CSVReader(new InputStreamReader(context.getApplicationContext().getAssets().open("data_songs_e.csv")));					
-				} else if (TAG.equals(FAVORITES_SONGS_TAG)){
-					FileInputStream fin = new FileInputStream(file);
-					csvReader = new CSVReader(new InputStreamReader(fin));
-				}
-				next = csvReader.readNext();
-					while(next!=null){
-						song = new Song();
-						song.setId(next[ID_POSITION]);
-						song.setArtist(next[ARTIST_POSITION]);
-						song.setSongName(next[SONG_NAME_POSITION]);
-						if (!next[ALBUM_COVER_POSITION].equals("")){
-							int id = context.getResources().getIdentifier(next[ALBUM_COVER_POSITION], "drawable", context.getPackageName());
-							albumCover = context.getResources().getDrawable(id);
-							song.setAlbumPicture(albumCover);						
-						} else {
-							song.setAlbumCover(albumCoverDefault);
-						}
-						if (!next[DURATION_POSITION].equals("")){
-							song.setDuration(next[DURATION_POSITION]);						
-						} else {
-							song.setDuration("--:--");
-						}
-						if (!next[LYRIC_POSITION].equals("")){
-							song.setLyrics(next[LYRIC_POSITION]);						
-						} else {
-							song.setLyrics("no lyrics");
-						}
-						if (!next[VERSION_POSITION].equals("")){
-							song.setVersion(next[VERSION_POSITION]);
-						} else {
-							song.setVersion("---");
-						}
-						if (!next[REMARKS_POSITION].equals("")){
-							song.setRemarks(next[REMARKS_POSITION]);
-						} else {
-							song.setRemarks("---");
-						}
-						list.add(song);
-						next = csvReader.readNext();
-					}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    private static final int ID_POSITION = 0;
+    private static final int ARTIST_POSITION = 1;
+    private static final int SONG_NAME_POSITION = 2;
+    private static final int ALBUM_COVER_POSITION = 3;
+    private static final int DURATION_POSITION = 4;
+    private static final int LYRIC_POSITION = 5;
+    private static final int REMARKS_POSITION = 6;
+    private static final int VERSION_POSITION = 7;
+    private static final String ALL_SONGS_TAG = "FragmentAllSongsByArtist";
+    private static final String FAVORITES_SONGS_TAG = "FragmentFavoritesSongs";
+    private static final String FILE_NAME_FAVORITES = "data_songs_favorites.csv";
+    public static final String SONG_ID = "SONG_ID";
+    public static final String ARTIST_NAME = "ARTIST_NAME";
+    public static final String SONG_NAME = "SONG_NAME";
+    public static final String ALBUM_COVER_URL = "ALBUM_COVER_URL";
+    public static final String DURATION = "DURATION";
+    public static final String LYRICS_URL = "LYRICS_URL";
+    public static final String VERSION = "VERSION";
+    public static final String REMARKS = "REMARKS";
+    private static ArrayList<Song> songArrayList;
 
-		return list;
-	}
+    public interface dataIteractionListener {
+        public void dataLoaded(ArrayList<Song> songs);
+    }
 
-	public void addSongToFavorites(Context context, Song song) throws IOException{
-		String resourceName = "defcover";	
-		CSVWriter writer = new CSVWriter(new FileWriter(file, true));
-		
-		String [] writeLine = {song.getId(),song.getArtist(),song.getSongName(),resourceName,song.getDuration(),song.getLyrics(), song.getVersion(),song.getRemarks()};
-		writer.writeNext(writeLine);
-		writer.flush();
-		writer.close();
-		Toast.makeText(context.getApplicationContext(), "Song was added to Favorites", Toast.LENGTH_SHORT).show();
-	}
+    public static void loadSongList(final Context context, String TAG,
+                                    final dataIteractionListener mListener) {
+        songArrayList = new ArrayList<Song>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Song");
+        query.findInBackground(new FindCallback<ParseObject>() {
 
-	public void removeSongFromFavorites (Context context, Song song){
-		
-	}
-	
+            public void done(List<ParseObject> songList, ParseException e) {
+                if (e == null) {
+                    Log.d("Parse SDK Song", "Retrieved " + songList.size() + " songs");
+                    for (ParseObject parseObject : songList) {
 
-	
+                        Song song = new Song(
+                                parseObject.getString(SONG_ID),
+                                parseObject.getString(ARTIST_NAME),
+                                parseObject.getString(SONG_NAME),
+//                                parseObject.getString(ALBUM_COVER_URL),
+                                context.getResources().getDrawable(R.drawable.defcover),
+                                parseObject.getString(DURATION),
+                                parseObject.getString(LYRICS_URL),
+                                parseObject.getString(VERSION),
+                                parseObject.getString(REMARKS)
+                        );
+                        songArrayList.add(song);
+                    }
+                    mListener.dataLoaded(songArrayList);
+
+                } else {
+                    Log.d("Parse SDK Song", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    //used only to import songs from csv files.
+    //do not use it regulary
+    private static void importSongsToParse(final ArrayList<Song> list) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i = 0;
+                for (Song song1 : list) {
+                    i++;
+                    ParseObject songObject = new ParseObject("Song");
+                    songObject.put("SONG_ID", song1.getId());
+                    songObject.put("ARTIST_NAME", song1.getArtist());
+                    songObject.put("SONG_NAME", song1.getSongName());
+                    songObject.put("ALBUM_COVER_URL", "http://");
+                    songObject.put("DURATION", song1.getDuration());
+                    songObject.put("LYRICS_URL", "http://");
+                    songObject.put("VERSION", song1.getVersion());
+                    songObject.put("REMARKS", song1.getRemarks());
+                    songObject.saveInBackground();
+                    if (i == 29) {
+                        try {
+                            Thread.sleep(1000);
+                            i = 0;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        thread.start();
+
+
+    }
+
+
+    public void addSongToFavorites(Context context, Song song) throws IOException {
+    }
+
+    public void removeSongFromFavorites(Context context, Song song) {
+    }
 
 
 }
