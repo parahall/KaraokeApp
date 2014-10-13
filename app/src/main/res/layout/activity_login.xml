@@ -14,7 +14,7 @@
         android:layout_marginTop="100dp"
         android:visibility="invisible"
         android:inputType="textPersonName"
-        android:hint="name"
+        android:hint="name234"
         /> 
     
     <EditText
