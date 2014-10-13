@@ -2,40 +2,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:orientation="vertical" 
+    android:orientation="vertical"
+    android:background="@drawable/background"
     >
 
     <EditText 
         android:id="@+id/edt_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="100dp"
+        android:paddingLeft="5dp"
         android:visibility="invisible"
         android:inputType="textPersonName"
-        android:hint="name234"
+        android:hint="name"
+        android:background="@drawable/edt_background"
+        android:alpha="0.2"
+
         /> 
     
     <EditText
         android:id="@+id/edt_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:hint="e-mail"/>
+        android:hint="e-mail"
+        android:background="@drawable/edt_background"
+        />
 
     <EditText
         android:id="@+id/edt_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
         android:ems="10"
         android:inputType="textPassword" 
-        android:hint="password"/>
+        android:hint="password"
+        android:background="@drawable/edt_background"
+
+        />
 
     <Button
         android:id="@+id/btn_login"
@@ -43,8 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
-        android:text="Log in" />
+        android:text="Log in"
+        android:background="@drawable/btn_backgroung"
+        android:textColor="@color/white"/>
     
 
     <Button
@@ -53,8 +70,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
-        android:text="Facebook Log in" />
+        android:text="Facebook Log in"
+        android:background="@drawable/btn_backgroung"
+        android:textColor="@color/white"/>
 
      <Button
         android:id="@+id/btn_registration"
@@ -62,6 +82,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
-        android:text="Registration" />
+        android:text="Registration"
+        android:textColor="@color/white"
+        />
 </LinearLayout>
