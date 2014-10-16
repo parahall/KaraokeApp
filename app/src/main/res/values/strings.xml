@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">KaraokeApp</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="btn_registration">Registration</string>
+    <string name="btn_login">Log In</string>
+    <string name="btn_fb_login">Facebook Log In</string>
     
     <string-array 
         name="items_navigation_drawer">

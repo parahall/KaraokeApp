@@ -3,32 +3,44 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
+    android:background="@drawable/bgnd"
     >
 
+    <ImageView
+        android:src="@drawable/logo_login"
+        android:layout_width="300dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"/>
     <EditText 
         android:id="@+id/edt_name"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="5dp"
         android:visibility="invisible"
         android:inputType="textPersonName"
         android:hint="name"
+        android:background="@drawable/edt_bgnd"
+        android:textCursorDrawable="@null"
+        android:textColor="#ffffff"
         />
     
     <EditText
         android:id="@+id/edt_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-
         android:inputType="textEmailAddress"
         android:hint="e-mail"
+        android:background="@drawable/edt_bgnd"
+        android:textCursorDrawable="@null"
+        android:textColor="#ffffff"
        />
 
     <EditText
@@ -42,8 +54,9 @@
         android:ems="10"
         android:inputType="textPassword" 
         android:hint="password"
-
-
+        android:background="@drawable/edt_bgnd"
+        android:textCursorDrawable="@null"
+        android:textColor="#ffffff"
         />
 
     <Button
@@ -54,8 +67,8 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:text="Log in"
-
+        android:text="@string/btn_login"
+        android:background="@drawable/selector_btn_bgnd"
         android:textColor="#ffffff"/>
     
 
@@ -67,8 +80,8 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="5dp"
         android:ems="10"
-        android:text="Facebook Log in"
-
+        android:text="@string/btn_fb_login"
+        android:background="@drawable/selector_btn_bgnd"
         android:textColor="#ffffff"/>
 
      <Button
@@ -77,9 +90,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:text="Registration"
-        android:textColor="#ffffff"
+        android:text="@string/btn_registration"
+        android:background="@drawable/btn_r_bgnd"
+        android:textColor="@color/selector_btn_registration_color"
         />
 </LinearLayout>

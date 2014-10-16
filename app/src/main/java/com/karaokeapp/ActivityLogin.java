@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -100,6 +102,8 @@ public class ActivityLogin extends Activity implements View.OnClickListener {
 			Log.i("FB-LOGIN", "FB Login button was pressed");
 			break;
 		case R.id.btn_registration:
+            mRegistrationBtn.setTextColor(Color.WHITE);
+            mRegistrationBtn.setBackgroundResource(R.drawable.selector_btn_bgnd);
 			Log.i("REGISTRATION", "Registration button was pressed");
 			mName.setVisibility(View.VISIBLE);
 			mLoginBtn.setVisibility(View.GONE);
