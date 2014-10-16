@@ -39,8 +39,7 @@ public class ActivityLogin extends Activity implements View.OnClickListener {
         Parse.initialize(this, "dTaJAN6k8fHcjfy6ETBPYvPrABgVf1L40EVQLME0",
                 "Nmjj8eCjcxFFYfVdlLPXJygxM4AXM32wUNQUM1Oo");
 
-        ActionBar actionBar = getActionBar();
-        actionBar.hide();
+
 		setContentView(R.layout.activity_login);
         mName = (EditText) findViewById(R.id.edt_name);
         mEmail = (EditText) findViewById(R.id.edt_email);
