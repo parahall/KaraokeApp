@@ -1,5 +1,6 @@
 package com.karaokeapp;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -35,13 +36,18 @@ public class ActivityLogin extends Activity implements View.OnClickListener {
 	
 	private SharedPreferences mPref;
 
+
+
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parse.initialize(this, "dTaJAN6k8fHcjfy6ETBPYvPrABgVf1L40EVQLME0",
                 "Nmjj8eCjcxFFYfVdlLPXJygxM4AXM32wUNQUM1Oo");
 
-
+        final ActionBar actionBar;
+        actionBar = getActionBar();
+//        actionBar.setBackgroundDrawable();
 		setContentView(R.layout.activity_login);
         mName = (EditText) findViewById(R.id.edt_name);
         mEmail = (EditText) findViewById(R.id.edt_email);
