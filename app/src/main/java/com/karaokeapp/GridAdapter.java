@@ -85,7 +85,7 @@ public class GridAdapter extends BaseAdapter {
 			holder.albumCover = (ImageView) convertView
 					.findViewById(R.id.iv_album_cover_item);
 			holder.addToFavorites = (ImageView) convertView.findViewById(R.id.btn_add_to_favorite_item);
-			holder.removeFromFavorites = (ImageView) convertView.findViewById(R.id.btn_remove_from_favorites);
+//			holder.removeFromFavorites = (ImageView) convertView.findViewById(R.id.btn_remove_from_favorites);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -97,7 +97,7 @@ public class GridAdapter extends BaseAdapter {
 		holder.albumCover.setImageDrawable(mList.get(position).albumCover);
 		
 		if (TAG.equals(ALL_SONGS_TAG)){
-			holder.removeFromFavorites.setVisibility(View.GONE);
+//			holder.removeFromFavorites.setVisibility(View.GONE);
 			
 		} else if (TAG.equals(FAVORITES_SONGS_TAG)){
 			holder.addToFavorites.setVisibility(View.GONE);
@@ -118,16 +118,16 @@ public class GridAdapter extends BaseAdapter {
 			}
 		});
 		
-		holder.removeFromFavorites.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				GridView mGvSong = (GridView) parent.findViewById(R.id.gv_song);
-				Song song = (Song) mGvSong.getItemAtPosition(position);
-				DataManager dataManager = new DataManager();
-				dataManager.removeSongFromFavorites(mContext, song);
-			}
-		});
+//		holder.removeFromFavorites.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				GridView mGvSong = (GridView) parent.findViewById(R.id.gv_song);
+//				Song song = (Song) mGvSong.getItemAtPosition(position);
+//				DataManager dataManager = new DataManager();
+//				dataManager.removeSongFromFavorites(mContext, song);
+//			}
+//		});
 		return convertView;
 	}
 
