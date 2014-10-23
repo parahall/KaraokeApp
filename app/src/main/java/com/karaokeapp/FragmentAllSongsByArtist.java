@@ -72,19 +72,21 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
     @Override
     public void dataLoaded(ArrayList<Song> songs) {
         progressDialog.hide();
-        mAdapter = new GridAdapter(getActivity(), songs, TAG);
-        mGvSong.setAdapter(mAdapter);
-        mGvSong.setOnItemClickListener(new GridView.OnItemClickListener() {
+        if(isAdded()) {
+            mAdapter = new GridAdapter(getActivity(), songs, TAG);
+            mGvSong.setAdapter(mAdapter);
+            mGvSong.setOnItemClickListener(new GridView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Song choosedSong = (Song) mAdapter.getItem(position);
-                DialogFragmentSongDetails songFragment = DialogFragmentSongDetails
-                        .getInstance(choosedSong);
-                songFragment.show(getFragmentManager(), "Dialog fragment Song Details");
-            }
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    Song choosedSong = (Song) mAdapter.getItem(position);
+                    DialogFragmentSongDetails songFragment = DialogFragmentSongDetails
+                            .getInstance(choosedSong);
+                    songFragment.show(getFragmentManager(), "Dialog fragment Song Details");
+                }
 
-        });
+            });
+        }
     }
 }
