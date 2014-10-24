@@ -1,34 +1,29 @@
 package com.karaokeapp;
 
-import java.util.Locale;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.SearchManager;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.GridView;
+
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
+import java.util.ArrayList;
 
 @SuppressLint("NewApi")
 public class ActivityMain extends FragmentActivity implements OnEditorActionListener{
@@ -37,11 +32,20 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 	private MenuItem mSearchItem;
 	
 	private  FragmentManager fm = getSupportFragmentManager();
-	private String [] mNavigationDrawerItemTitle;
+	private String [] mNavigationDrawerTitles;
+    private TypedArray mNavigationDrawerIcons;
+    private ArrayList<NavDrawerItem> mNavigationDraverItems;
+    private NavDrawerAdapter mNavigationAdapter;
 	
 	private DrawerLayout mDlNavigation;
 	private ListView mLvDrawer;
 	private ActionBarDrawerToggle mDrawerToggle;
+
+    private final int FAVORITES_POSITION = 0;
+    private final int SONGS_BY_ARTIST_POSITION = 1;
+    private final int SONGS_BY_NAME_POSITION = 2;
+    private final int QUEUE_OF_SONGS_POSITION = 3;
+    private final int SETTINGS_POSITION = 4;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -49,11 +53,26 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//adding Navigation drawer to activity
-		mNavigationDrawerItemTitle = getResources().getStringArray(R.array.items_navigation_drawer);
-		mLvDrawer = (ListView) findViewById(R.id.lv_drawer);		
-		mLvDrawer.setAdapter(new ArrayAdapter<String>(this, R.layout.item_navigation_drawer_list, mNavigationDrawerItemTitle));
-		mDlNavigation = (DrawerLayout) findViewById(R.id.dl_navigation);
-		//opening and closing Navigation Drawer with app icon
+        mNavigationDrawerTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
+        mNavigationDrawerIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icon);
+        mDlNavigation = (DrawerLayout)findViewById(R.id.dl_navigation);
+        mLvDrawer = (ListView)findViewById(R.id.lv_drawer);
+        mNavigationDraverItems = new ArrayList<NavDrawerItem>();
+        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[FAVORITES_POSITION], mNavigationDrawerIcons.getResourceId(FAVORITES_POSITION, -1)));
+        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[SONGS_BY_ARTIST_POSITION], mNavigationDrawerIcons.getResourceId(SONGS_BY_ARTIST_POSITION, -1)));
+        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[SONGS_BY_NAME_POSITION], mNavigationDrawerIcons.getResourceId(SONGS_BY_NAME_POSITION, -1)));
+        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[QUEUE_OF_SONGS_POSITION], mNavigationDrawerIcons.getResourceId(QUEUE_OF_SONGS_POSITION, -1)));
+        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[SETTINGS_POSITION], mNavigationDrawerIcons.getResourceId(SETTINGS_POSITION, -1)));
+
+        //recycle the typed array
+        mNavigationDrawerIcons.recycle();
+
+        //setting Navigation Drawer adapter
+        mNavigationAdapter = new NavDrawerAdapter(this, mNavigationDraverItems);
+        mLvDrawer.setAdapter(mNavigationAdapter);
+
+
+        //opening and closing Navigation Drawer with app icon
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDlNavigation, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close);
 		mDlNavigation.setDrawerListener(mDrawerToggle);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
