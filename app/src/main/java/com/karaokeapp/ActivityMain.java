@@ -16,9 +16,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -84,26 +86,26 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 					int position, long id) {
 				Fragment fragment = null;
 				switch (position) {
-				case 0:
-					fragment = new FragmentFavoritesSongs();
-					getActionBar().setTitle("Favorites");
-					break;
-				case 1: 
-					fragment = new FragmentAllSongsByArtist();
-					getActionBar().setTitle("All songs by Artist");
-					break;
-				case 2:
-					fragment = new FragmentAllSongsByName();
-					getActionBar().setTitle("All songs by Name");
-					break;
-				case 3:
-					fragment = new FragmentQueueOfSongs();
-					getActionBar().setTitle("Queue of songs");
-					break;
-				case 4:
-					break;
-				default:
-					break;
+				    case FAVORITES_POSITION:
+					    fragment = new FragmentFavoritesSongs();
+					    getActionBar().setTitle("Favorites");
+					    break;
+				    case SONGS_BY_ARTIST_POSITION:
+					    fragment = new FragmentAllSongsByArtist();
+					    getActionBar().setTitle("All songs by Artist");
+					    break;
+				    case SONGS_BY_NAME_POSITION:
+					    fragment = new FragmentAllSongsByName();
+					    getActionBar().setTitle("All songs by Name");
+					    break;
+				    case QUEUE_OF_SONGS_POSITION:
+					    fragment = new FragmentQueueOfSongs();
+					    getActionBar().setTitle("Queue of songs");
+					    break;
+				    case SETTINGS_POSITION:
+					    break;
+				    default:
+					    break;
 				}
 				if (fragment!=null){
 					fm.beginTransaction().replace(R.id.fl_content, fragment).commit();
