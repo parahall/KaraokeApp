@@ -1,14 +1,12 @@
 package com.karaokeapp;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +18,7 @@ import android.widget.Toast;
 import com.parse.Parse;
 
 
-public class ActivityLogin extends Activity implements View.OnClickListener {
+public class  ActivityLogin extends Activity implements View.OnClickListener {
 	
 	
 	private EditText mName;
@@ -45,9 +43,6 @@ public class ActivityLogin extends Activity implements View.OnClickListener {
         Parse.initialize(this, "dTaJAN6k8fHcjfy6ETBPYvPrABgVf1L40EVQLME0",
                 "Nmjj8eCjcxFFYfVdlLPXJygxM4AXM32wUNQUM1Oo");
 
-        final ActionBar actionBar;
-        actionBar = getActionBar();
-//        actionBar.setBackgroundDrawable();
 		setContentView(R.layout.activity_login);
         mName = (EditText) findViewById(R.id.edt_name);
         mEmail = (EditText) findViewById(R.id.edt_email);
@@ -67,10 +62,10 @@ public class ActivityLogin extends Activity implements View.OnClickListener {
         
         if (!TextUtils.isEmpty(prefEmail) && !TextUtils.isEmpty(prefPassword)){
         	if (prefEmail.equalsIgnoreCase(prefEmail) && prefPassword.equalsIgnoreCase(prefPassword)){
-        		Intent mIntent = new Intent(ActivityLogin.this, ActivityMain.class);
-        		mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        		startActivity(mIntent);
-				Log.i("LOG IN", "User is loged in");
+        		Intent intent = new Intent(ActivityLogin.this, ActivityMain.class);
+        		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        		startActivity(intent);
+				Log.i("LOG IN", "User is logged in");
         	} else {
         		Toast.makeText(getApplicationContext(), "e-mail or pasword are wrong!", Toast.LENGTH_SHORT).show();
         		Editor editor = mPref.edit();

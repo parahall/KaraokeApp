@@ -15,17 +15,6 @@ import java.util.List;
 
 public class DataManager {
 
-    private static final int ID_POSITION = 0;
-    private static final int ARTIST_POSITION = 1;
-    private static final int SONG_NAME_POSITION = 2;
-    private static final int ALBUM_COVER_POSITION = 3;
-    private static final int DURATION_POSITION = 4;
-    private static final int LYRIC_POSITION = 5;
-    private static final int REMARKS_POSITION = 6;
-    private static final int VERSION_POSITION = 7;
-    private static final String ALL_SONGS_TAG = "FragmentAllSongsByArtist";
-    private static final String FAVORITES_SONGS_TAG = "FragmentFavoritesSongs";
-    private static final String FILE_NAME_FAVORITES = "data_songs_favorites.csv";
     public static final String SONG_ID = "SONG_ID";
     public static final String ARTIST_NAME = "ARTIST_NAME";
     public static final String SONG_NAME = "SONG_NAME";
