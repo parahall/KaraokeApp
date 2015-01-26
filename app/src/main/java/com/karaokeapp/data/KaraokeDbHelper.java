@@ -42,13 +42,13 @@ public class KaraokeDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_KARAOKE_SONGS_TABLE = "CREATE TABLE " + KaraokeSongsEntry.TABLE_NAME + " (" +
                 KaraokeSongsEntry._ID + " INTEGER PRIMARY KEY," +
                 KaraokeSongsEntry.COLUMN_SONG_ID + " TEXT UNIQUE NOT NULL, " +
-                KaraokeSongsEntry.COLUMN_ARTIST_NAME + "TEXT " +
-                KaraokeSongsEntry.COLUMN_SONG_NAME + "TEXT " +
-                KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL + "TEXT " +
-                KaraokeSongsEntry.COLUMN_DURATION + "TEXT " +
-                KaraokeSongsEntry.COLUMN_LYRICS_URL + "TEXT " +
-                KaraokeSongsEntry.COLUMN_VERSION + "TEXT " +
-                KaraokeSongsEntry.COLUMN_REMARKS + "TEXT ";
+                KaraokeSongsEntry.COLUMN_ARTIST_NAME + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_SONG_NAME + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_DURATION + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_LYRICS_URL + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_VERSION + " TEXT, " +
+                KaraokeSongsEntry.COLUMN_REMARKS + " TEXT);";
 
         sqLiteDatabase.execSQL(SQL_CREATE_KARAOKE_SONGS_TABLE);
     }

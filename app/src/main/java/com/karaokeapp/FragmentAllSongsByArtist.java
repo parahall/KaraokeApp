@@ -1,9 +1,16 @@
 package com.karaokeapp;
 
+import com.karaokeapp.data.KaraokeContract.*;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +27,7 @@ import java.util.Locale;
 
 @SuppressLint("NewApi")
 public class FragmentAllSongsByArtist extends Fragment implements DataManager
-        .dataIteractionListener {
+        .dataIteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private GridAdapter mAdapter;
     private MenuItem mSearchItem;
@@ -29,6 +36,24 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
     private ProgressDialog progressDialog;
     private GridView mGvSong;
 
+    private static final int KARAOKE_SONGS_LOADER = 0;
+
+    private static final String[] KARAOKE_SONGS_COLUMNS = {
+            KaraokeSongsEntry.TABLE_NAME + "." + KaraokeSongsEntry._ID,
+            KaraokeSongsEntry.COLUMN_SONG_ID,
+            KaraokeSongsEntry.COLUMN_SONG_NAME,
+            KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL,
+            KaraokeSongsEntry.COLUMN_DURATION,
+            KaraokeSongsEntry.COLUMN_LYRICS_URL,
+            KaraokeSongsEntry.COLUMN_VERSION,
+            KaraokeSongsEntry.COLUMN_REMARKS
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getLoaderManager().initLoader(KARAOKE_SONGS_LOADER,null,this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,8 +61,6 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_all_songs_by_artist, container, false);
         mGvSong = (GridView) view.findViewById(R.id.gv_song);
-        DataManager.loadSongList(view.getContext(),
-                TAG, this);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
         return view;
@@ -89,4 +112,33 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
             });
         }
     }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Sort order:  Ascending, by date.
+
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+        return new CursorLoader(
+                getActivity(),
+                KaraokeSongsEntry.CONTENT_URI,
+                KARAOKE_SONGS_COLUMNS,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst() && isAdded()) {
+            DataManager.loadSongs(this, data);
+        } else {
+            DataManager.loadSongList(getActivity(),this);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) { }
 }

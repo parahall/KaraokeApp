@@ -41,10 +41,6 @@ public class KaraokeContract {
     // At least, let's hope not.  Don't be that dev, reader.  Don't be that dev.
     public static final String PATH_KARAOKE_SONGS = "karaoke";
 
-    // Format used for storing dates in the database.  ALso used for converting those strings
-    // back into date objects for comparison/processing.
-    public static final String DATE_FORMAT = "yyyyMMdd";
-
     /* Inner class that defines the table contents of the karaoke songs table */
     public static final class KaraokeSongsEntry implements BaseColumns {
 
@@ -69,7 +65,7 @@ public class KaraokeContract {
         public static final String COLUMN_REMARKS = "REMARKS";
 
 
-        public static Uri buildWeatherUri(long id) {
+        public static Uri buildKaraokeSongsUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 

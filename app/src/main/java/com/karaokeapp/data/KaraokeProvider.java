@@ -36,12 +36,6 @@ public class KaraokeProvider extends ContentProvider {
         sKaraokeSongsQueryBuilder.setTables(KaraokeSongsEntry.TABLE_NAME);
     }
 
-    private static final int WEATHER = 100;
-    private static final int WEATHER_WITH_LOCATION = 101;
-    private static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
-    private static final int LOCATION = 300;
-    private static final int LOCATION_ID = 301;
-
     private Cursor getKaraokeSongs(Uri uri, String[] projection, String sortOrder) {
 
         return sKaraokeSongsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
@@ -92,7 +86,7 @@ public class KaraokeProvider extends ContentProvider {
 
         long _id = db.insert(KaraokeSongsEntry.TABLE_NAME, null, values);
         if ( _id > 0 )
-            returnUri = KaraokeSongsEntry.buildWeatherUri(_id);
+            returnUri = KaraokeSongsEntry.buildKaraokeSongsUri(_id);
         else
             throw new android.database.SQLException("Failed to insert row into " + uri);
         getContext().getContentResolver().notifyChange(uri, null);
