@@ -1,12 +1,6 @@
 package com.karaokeapp;
 
 
-import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +9,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,30 +42,28 @@ public class DataManager {
     private static ArrayList<Song> songArrayList;
 
     public static void loadSongs(dataIteractionListener listener, Cursor data) {
-        //TODO create ArrayList from Cursor;
         songArrayList = new ArrayList<Song>();
-        if(data.moveToFirst()){
-            String artist = data
-                    .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ARTIST_NAME));
-            String songName = data
-                    .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_NAME));
+        if (data.moveToFirst()) {
+            do {
+                String id = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_ID));
+                String artist = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ARTIST_NAME));
+                String songName = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_NAME));
+                byte[] bytes = data.getBlob(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL));
+                Drawable albumCover = new BitmapDrawable(
+                        BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                String duration = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_DURATION));
+                String lyrics = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_LYRICS_URL));
+                String version = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_VERSION));
+                String remarks = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_REMARKS));
 
-            byte[] bytes = data.getBlob(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_ID));
-            Drawable albumCover = new BitmapDrawable(
-                    BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-
-            String duration = data
-                    .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_DURATION));
-            String lyrics = data
-                    .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_LYRICS_URL));
-            String id = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_ID));
-            String version = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_VERSION));
-            String remarks = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_REMARKS));
-
-            Song song = new Song(id, artist, songName, albumCover, duration, lyrics, version,
-                    remarks);
-            songArrayList.add(song);
-            data.moveToNext();
+                Song song = new Song(id, artist, songName, albumCover, duration, lyrics, version,
+                        remarks);
+                songArrayList.add(song);
+            } while (data.moveToNext());
         }
         listener.dataLoaded(songArrayList);
     }
@@ -76,7 +74,7 @@ public class DataManager {
     }
 
     public static void loadSongList(final Context context,
-            final dataIteractionListener listener) {
+                                    final dataIteractionListener listener) {
         songArrayList = new ArrayList<Song>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Song");
         query.findInBackground(new FindCallback<ParseObject>() {

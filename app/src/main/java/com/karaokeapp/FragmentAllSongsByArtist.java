@@ -1,11 +1,7 @@
 package com.karaokeapp;
 
-import com.karaokeapp.data.KaraokeContract.*;
-
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -21,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
 
+import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -35,17 +33,6 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
     private GridView mGvSong;
 
     private static final int KARAOKE_SONGS_LOADER = 0;
-
-    private static final String[] KARAOKE_SONGS_COLUMNS = {
-            KaraokeSongsEntry.TABLE_NAME + "." + KaraokeSongsEntry._ID,
-            KaraokeSongsEntry.COLUMN_SONG_ID,
-            KaraokeSongsEntry.COLUMN_SONG_NAME,
-            KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL,
-            KaraokeSongsEntry.COLUMN_DURATION,
-            KaraokeSongsEntry.COLUMN_LYRICS_URL,
-            KaraokeSongsEntry.COLUMN_VERSION,
-            KaraokeSongsEntry.COLUMN_REMARKS
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +108,7 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
         return new CursorLoader(
                 getActivity(),
                 KaraokeSongsEntry.CONTENT_URI,
-                KARAOKE_SONGS_COLUMNS,
+                KaraokeSongsEntry.KARAOKE_SONGS_COLUMNS,
                 null,
                 null,
                 null

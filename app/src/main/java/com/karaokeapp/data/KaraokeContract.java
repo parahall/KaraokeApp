@@ -65,6 +65,18 @@ public class KaraokeContract {
         public static final String COLUMN_REMARKS = "REMARKS";
 
 
+        public static final String[] KARAOKE_SONGS_COLUMNS = {
+                KaraokeSongsEntry.TABLE_NAME + "." + KaraokeSongsEntry._ID,
+                KaraokeSongsEntry.COLUMN_SONG_ID,
+                KaraokeSongsEntry.COLUMN_ARTIST_NAME,
+                KaraokeSongsEntry.COLUMN_SONG_NAME,
+                KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL,
+                KaraokeSongsEntry.COLUMN_DURATION,
+                KaraokeSongsEntry.COLUMN_LYRICS_URL,
+                KaraokeSongsEntry.COLUMN_VERSION,
+                KaraokeSongsEntry.COLUMN_REMARKS
+        };
+
         public static Uri buildKaraokeSongsUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
