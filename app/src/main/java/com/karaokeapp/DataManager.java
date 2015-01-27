@@ -44,7 +44,7 @@ public class DataManager {
     public static void loadSongs(dataIteractionListener listener, Cursor data) {
         //TODO create ArrayList from Cursor;
         songArrayList = new ArrayList<Song>();
-        do {
+        if(data.moveToFirst()){
             String artist = data
                     .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ARTIST_NAME));
             String songName = data
@@ -65,7 +65,8 @@ public class DataManager {
             Song song = new Song(id, artist, songName, albumCover, duration, lyrics, version,
                     remarks);
             songArrayList.add(song);
-        } while (data.moveToNext());
+            data.moveToNext();
+        }
         listener.dataLoaded(songArrayList);
     }
 

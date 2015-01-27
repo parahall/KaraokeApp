@@ -24,8 +24,6 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-
-@SuppressLint("NewApi")
 public class FragmentAllSongsByArtist extends Fragment implements DataManager
         .dataIteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
