@@ -1,7 +1,5 @@
 package com.karaokeapp;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -10,6 +8,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,25 +20,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-@SuppressLint("NewApi")
 public class ActivityMain extends FragmentActivity implements OnEditorActionListener {
 
-    private GridAdapter mAdapter;
-
-    private MenuItem mSearchItem;
-
-    private FragmentManager fm = getSupportFragmentManager();
-
-    private String[] mNavigationDrawerTitles;
-
-    private TypedArray mNavigationDrawerIcons;
-
-    private ArrayList<NavDrawerItem> mNavigationDraverItems;
-
-    private NavDrawerAdapter mNavigationAdapter;
+    private FragmentManager fm;
 
     private DrawerLayout mDlNavigation;
 
@@ -57,43 +44,48 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 
     private final int SETTINGS_POSITION = 4;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fm = getSupportFragmentManager();
         //adding Navigation drawer to activity
-        mNavigationDrawerTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
-        mNavigationDrawerIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icon);
+        String[] navigationDrawerTitles = getResources()
+                .getStringArray(R.array.navigation_drawer_titles);
+        TypedArray navigationDrawerIcons = getResources()
+                .obtainTypedArray(R.array.navigation_drawer_icon);
         mDlNavigation = (DrawerLayout) findViewById(R.id.dl_navigation);
         mLvDrawer = (ListView) findViewById(R.id.lv_drawer);
-        mNavigationDraverItems = new ArrayList<NavDrawerItem>();
-        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[FAVORITES_POSITION],
-                mNavigationDrawerIcons.getResourceId(FAVORITES_POSITION, -1)));
-        mNavigationDraverItems
-                .add(new NavDrawerItem(mNavigationDrawerTitles[SONGS_BY_ARTIST_POSITION],
-                        mNavigationDrawerIcons.getResourceId(SONGS_BY_ARTIST_POSITION, -1)));
-        mNavigationDraverItems
-                .add(new NavDrawerItem(mNavigationDrawerTitles[SONGS_BY_NAME_POSITION],
-                        mNavigationDrawerIcons.getResourceId(SONGS_BY_NAME_POSITION, -1)));
-        mNavigationDraverItems
-                .add(new NavDrawerItem(mNavigationDrawerTitles[QUEUE_OF_SONGS_POSITION],
-                        mNavigationDrawerIcons.getResourceId(QUEUE_OF_SONGS_POSITION, -1)));
-        mNavigationDraverItems.add(new NavDrawerItem(mNavigationDrawerTitles[SETTINGS_POSITION],
-                mNavigationDrawerIcons.getResourceId(SETTINGS_POSITION, -1)));
+        ArrayList<NavDrawerItem> navigationDraverItems = new ArrayList<NavDrawerItem>();
+        navigationDraverItems.add(new NavDrawerItem(navigationDrawerTitles[FAVORITES_POSITION],
+                navigationDrawerIcons.getResourceId(FAVORITES_POSITION, -1)));
+        navigationDraverItems
+                .add(new NavDrawerItem(navigationDrawerTitles[SONGS_BY_ARTIST_POSITION],
+                        navigationDrawerIcons.getResourceId(SONGS_BY_ARTIST_POSITION, -1)));
+        navigationDraverItems
+                .add(new NavDrawerItem(navigationDrawerTitles[SONGS_BY_NAME_POSITION],
+                        navigationDrawerIcons.getResourceId(SONGS_BY_NAME_POSITION, -1)));
+        navigationDraverItems
+                .add(new NavDrawerItem(navigationDrawerTitles[QUEUE_OF_SONGS_POSITION],
+                        navigationDrawerIcons.getResourceId(QUEUE_OF_SONGS_POSITION, -1)));
+        navigationDraverItems.add(new NavDrawerItem(navigationDrawerTitles[SETTINGS_POSITION],
+                navigationDrawerIcons.getResourceId(SETTINGS_POSITION, -1)));
 
         //recycle the typed array
-        mNavigationDrawerIcons.recycle();
+        navigationDrawerIcons.recycle();
 
         //setting Navigation Drawer adapter
-        mNavigationAdapter = new NavDrawerAdapter(this, mNavigationDraverItems);
-        mLvDrawer.setAdapter(mNavigationAdapter);
+        NavDrawerAdapter navigationAdapter = new NavDrawerAdapter(this, navigationDraverItems);
+        mLvDrawer.setAdapter(navigationAdapter);
 
         //opening and closing Navigation Drawer with app icon
         mDrawerToggle = new ActionBarDrawerToggle(this, mDlNavigation,
                 R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close);
         mDlNavigation.setDrawerListener(mDrawerToggle);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         //onItemClickListener on navigation drawer item
         mLvDrawer.setOnItemClickListener(new OnItemClickListener() {
 
@@ -101,30 +93,45 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 Fragment fragment = null;
+                String TAG = "";
                 switch (position) {
                     case FAVORITES_POSITION:
-                        fragment = new FragmentFavoritesSongs();
-                        getActionBar().setTitle("Favorites");
+                        if (fm.findFragmentByTag(FragmentFavoritesSongs.TAG) == null) {
+                            TAG = FragmentFavoritesSongs.TAG;
+                            fragment = new FragmentFavoritesSongs();
+                            getActionBar().setTitle("Favorites");
+                        }
+
                         break;
                     case SONGS_BY_ARTIST_POSITION:
-                        fragment = new FragmentAllSongsByArtist();
-                        getActionBar().setTitle("All songs by Artist");
+                        if (fm.findFragmentByTag(FragmentSongsByArtist.TAG) == null) {
+                            TAG = FragmentSongsByArtist.TAG;
+                            fragment = new FragmentSongsByArtist();
+                            getActionBar().setTitle("All songs by Artist");
+                        }
                         break;
                     case SONGS_BY_NAME_POSITION:
-                        fragment = new FragmentAllSongsByName();
-                        getActionBar().setTitle("All songs by Name");
+                        if (fm.findFragmentByTag(FragmentSongsByName.TAG) == null) {
+                            TAG = FragmentSongsByName.TAG;
+                            fragment = new FragmentSongsByName();
+                            getActionBar().setTitle("All songs by Name");
+                        }
                         break;
                     case QUEUE_OF_SONGS_POSITION:
-                        fragment = new FragmentQueueOfSongs();
-                        getActionBar().setTitle("Queue of songs");
+                        if (fm.findFragmentByTag(FragmentQueueOfSongs.TAG) == null) {
+                            TAG = FragmentQueueOfSongs.TAG;
+                            fragment = new FragmentQueueOfSongs();
+                            getActionBar().setTitle("Queue of songs");
+                        }
                         break;
                     case SETTINGS_POSITION:
+                        Toast.makeText(ActivityMain.this,"Sorry,in next version", Toast.LENGTH_LONG).show();
                         break;
                     default:
                         break;
                 }
-                if (fragment != null) {
-                    fm.beginTransaction().replace(R.id.fl_content, fragment).commit();
+                if (fragment != null && TAG.length() > 0) {
+                    fm.beginTransaction().replace(R.id.fl_content, fragment, TAG).commit();
                     mDlNavigation.closeDrawer(mLvDrawer);
                 } else {
                     Log.e("ActivityMain", "Error in creating fragment");
@@ -135,9 +142,14 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
         });
 
         //starting home fragment
-        Fragment fragmentAllSongsByArtist = new FragmentAllSongsByArtist();
-        getActionBar().setTitle("All songs by Artist");
-        fm.beginTransaction().replace(R.id.fl_content, fragmentAllSongsByArtist).commit();
+        if (fm.findFragmentByTag(FragmentSongsByArtist.TAG) == null) {
+            Fragment fragmentAllSongsByArtist = new FragmentSongsByArtist();
+            getActionBar().setTitle("All songs by Artist");
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.replace(R.id.fl_content, fragmentAllSongsByArtist,
+                    FragmentSongsByArtist.TAG);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -160,7 +172,6 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("NewApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 //		MenuInflater inflater = getMenuInflater();
@@ -170,14 +181,14 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 //		SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
 //		SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
 //		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//		
+//
 //		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
-//			
+//
 //			@Override
 //			public boolean onQueryTextSubmit(String query) {
 //				return false;
 //			}
-//			
+//
 //			@Override
 //			public boolean onQueryTextChange(String newText) {
 //				String searchText = newText.toLowerCase(Locale.getDefault());
@@ -186,7 +197,7 @@ public class ActivityMain extends FragmentActivity implements OnEditorActionList
 //			}
 //		};
 //		searchView.setOnQueryTextListener(textChangeListener);
-//		
+//
         return super.onCreateOptionsMenu(menu);
     }
 

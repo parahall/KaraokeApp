@@ -24,4 +24,5 @@
     </array>
     <string name="drawer_open">Option navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="not_implemented">Sorry, but still not implemented. Next version</string>
 </resources>

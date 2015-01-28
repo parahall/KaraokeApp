@@ -10,16 +10,18 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 @SuppressLint("NewApi")
-public class FragmentAllSongsByName extends Fragment {
+public class FragmentSongsByName extends Fragment {
+
     private GridAdapter mAdapter;
+
     private MenuItem mSearchItem;
 
-    private static final String TAG = FragmentAllSongsByArtist.class.getSimpleName();
+    public static final String TAG = FragmentSongsByName.class.getSimpleName();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_all_songs_by_name, container, false);
         GridView mGvSong = (GridView) view.findViewById(R.id.gv_song_by_name);

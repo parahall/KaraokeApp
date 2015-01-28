@@ -1,22 +1,17 @@
 package com.karaokeapp;
 
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-
 import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.io.ByteArrayOutputStream;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +34,8 @@ public class DataManager {
 
     public static final String REMARKS = "REMARKS";
 
+    public static final String SONG_LIST_KEY = "SONG_LIST_KEY";
+
     private static ArrayList<Song> songArrayList;
 
     public static void loadSongs(dataIteractionListener listener, Cursor data) {
@@ -50,15 +47,16 @@ public class DataManager {
                         .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ARTIST_NAME));
                 String songName = data
                         .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_SONG_NAME));
-                byte[] bytes = data.getBlob(data.getColumnIndex(KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL));
-                Drawable albumCover = new BitmapDrawable(
-                        BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                String albumCover = data.getString(
+                        data.getColumnIndex(KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL));
                 String duration = data
                         .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_DURATION));
                 String lyrics = data
                         .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_LYRICS_URL));
-                String version = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_VERSION));
-                String remarks = data.getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_REMARKS));
+                String version = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_VERSION));
+                String remarks = data
+                        .getString(data.getColumnIndex(KaraokeSongsEntry.COLUMN_REMARKS));
 
                 Song song = new Song(id, artist, songName, albumCover, duration, lyrics, version,
                         remarks);
@@ -74,7 +72,7 @@ public class DataManager {
     }
 
     public static void loadSongList(final Context context,
-                                    final dataIteractionListener listener) {
+            final dataIteractionListener listener) {
         songArrayList = new ArrayList<Song>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Song");
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -89,7 +87,7 @@ public class DataManager {
                                 parseObject.getString(ARTIST_NAME),
                                 parseObject.getString(SONG_NAME),
 //                                parseObject.getString(ALBUM_COVER_URL),
-                                context.getResources().getDrawable(R.drawable.defcover),
+                                null,
                                 parseObject.getString(DURATION),
                                 parseObject.getString(LYRICS_URL),
                                 parseObject.getString(VERSION),
@@ -108,22 +106,9 @@ public class DataManager {
     }
 
     private static void storeDataLocally(Context context, ArrayList<Song> songArrayList) {
-        for (Song song : songArrayList) {
-            ContentValues value = new ContentValues();
-            value.put(KaraokeSongsEntry.COLUMN_SONG_ID, song.getId());
-            value.put(KaraokeSongsEntry.COLUMN_ARTIST_NAME, song.getArtist());
-            value.put(KaraokeSongsEntry.COLUMN_SONG_NAME, song.getSongName());
-            Bitmap bitmap = ((BitmapDrawable) song.getAlbumCover()).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bitmapdata = stream.toByteArray();
-            value.put(KaraokeSongsEntry.COLUMN_ALBUM_COVER_URL, bitmapdata);
-            value.put(KaraokeSongsEntry.COLUMN_DURATION, song.getDuration());
-            value.put(KaraokeSongsEntry.COLUMN_LYRICS_URL, song.getLyrics());
-            value.put(KaraokeSongsEntry.COLUMN_VERSION, song.getVersion());
-            value.put(KaraokeSongsEntry.COLUMN_REMARKS, song.getRemarks());
-            context.getContentResolver().insert(KaraokeSongsEntry.CONTENT_URI, value);
-        }
+        Intent intent = new Intent(context, DataStoreService.class);
+        intent.putExtra(DataManager.SONG_LIST_KEY, songArrayList);
+        context.startService(intent);
 
     }
 
@@ -162,7 +147,7 @@ public class DataManager {
     }
 
 
-    public void addSongToFavorites(Context context, Song song) throws IOException {
+    public void addSongToFavorites(Song song) throws IOException {
     }
 
     public void removeSongFromFavorites(Context context, Song song) {

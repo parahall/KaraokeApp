@@ -10,45 +10,49 @@ import android.widget.TextView;
 
 public class DialogFragmentSongDetails extends DialogFragment {
 
-	private static final String SONG_KEY = "THIS_IS_THE_KEY_FOR_SONG";
+    private static final String SONG_KEY = "THIS_IS_THE_KEY_FOR_SONG";
 
-	protected static final String TAG = DialogFragmentSongDetails.class.getSimpleName();
+    protected static final String TAG = DialogFragmentSongDetails.class.getSimpleName();
 
-	Song choosedSong;
+    Song choosedSong;
 
-	private ImageView ivAlbumCover;
-	private TextView tvArtist;
-	private TextView tvSongName;
-	private TextView tvDuration;
+    private ImageView ivAlbumCover;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.dialog_fragment_song_details,
-				container, false);
-		ivAlbumCover = (ImageView) view.findViewById(R.id.iv_album_cover);
-//		ivAlbumCover.setImageResource(R.drawable.king);
-		tvArtist = (TextView) view.findViewById(R.id.tv_artist);
-		tvSongName = (TextView) view.findViewById(R.id.tv_song_name);
-		tvDuration = (TextView) view.findViewById(R.id.tv_duration);
-//			Song choosedSong = new Song();
-		choosedSong = (Song) getArguments().getSerializable(SONG_KEY);
-		ivAlbumCover.setImageDrawable(choosedSong.getAlbumCover());
-		tvArtist.setText(choosedSong.getArtist());
-		tvSongName.setText(choosedSong.getSongName());
-		tvDuration.setText(choosedSong.getDuration());
-			
-		getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
-		return view;
-	}
+    private TextView tvArtist;
 
-	public static DialogFragmentSongDetails getInstance(Song choosedSong) {
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(SONG_KEY, choosedSong);
-		DialogFragmentSongDetails fragment = new DialogFragmentSongDetails();
-		fragment.setArguments(bundle);
-		return fragment;
-	}
-	
+    private TextView tvSongName;
+
+    private TextView tvDuration;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.dialog_fragment_song_details,
+                container, false);
+        ivAlbumCover = (ImageView) view.findViewById(R.id.iv_album_cover);
+        tvArtist = (TextView) view.findViewById(R.id.tv_artist);
+        tvSongName = (TextView) view.findViewById(R.id.tv_song_name);
+        tvDuration = (TextView) view.findViewById(R.id.tv_duration);
+        choosedSong = (Song) getArguments().getSerializable(SONG_KEY);
+        if (choosedSong.albumCoverUrl != null && choosedSong.albumCoverUrl.length() != 0) {
+            //TODO download picture from internet
+        }
+        ivAlbumCover.setImageResource(R.drawable.defcover);
+        tvArtist.setText(choosedSong.getArtist());
+        tvSongName.setText(choosedSong.getSongName());
+        tvDuration.setText(choosedSong.getDuration());
+
+        getDialog().getWindow().requestFeature(STYLE_NO_TITLE);
+        return view;
+    }
+
+    public static DialogFragmentSongDetails getInstance(Song choosedSong) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SONG_KEY, choosedSong);
+        DialogFragmentSongDetails fragment = new DialogFragmentSongDetails();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 
 }

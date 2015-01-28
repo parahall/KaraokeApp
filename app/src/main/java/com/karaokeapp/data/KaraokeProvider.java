@@ -15,6 +15,8 @@
  */
 package com.karaokeapp.data;
 
+import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -22,30 +24,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
-
 public class KaraokeProvider extends ContentProvider {
 
-    // The URI Matcher used by this content provider.
     private KaraokeDbHelper mOpenHelper;
 
     private static final SQLiteQueryBuilder sKaraokeSongsQueryBuilder;
 
-    static{
+    static {
         sKaraokeSongsQueryBuilder = new SQLiteQueryBuilder();
         sKaraokeSongsQueryBuilder.setTables(KaraokeSongsEntry.TABLE_NAME);
-    }
-
-    private Cursor getKaraokeSongs(Uri uri, String[] projection, String sortOrder) {
-
-        return sKaraokeSongsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
     }
 
     @Override
@@ -57,7 +44,7 @@ public class KaraokeProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
+            String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
@@ -85,10 +72,11 @@ public class KaraokeProvider extends ContentProvider {
         Uri returnUri;
 
         long _id = db.insert(KaraokeSongsEntry.TABLE_NAME, null, values);
-        if ( _id > 0 )
+        if (_id > 0) {
             returnUri = KaraokeSongsEntry.buildKaraokeSongsUri(_id);
-        else
+        } else {
             throw new android.database.SQLException("Failed to insert row into " + uri);
+        }
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }

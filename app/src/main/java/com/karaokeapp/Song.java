@@ -11,7 +11,7 @@ public class Song implements Serializable {
 	private static final long serialVersionUID = -8844833022624096921L;
 	String artist;
 	String songName;
-	Drawable albumCover;
+	String albumCoverUrl;
 	String duration;
 
 	String lyrics;
@@ -22,24 +22,24 @@ public class Song implements Serializable {
 	public Song (){
 		
 	}
-	public Song(String id, String artist, String songName, Drawable albumCover,
+	public Song(String id, String artist, String songName, String albumCover,
 			String duration, String lyrics, String version, String remarks) {
 		super();
 		this.id = id;
 		this.artist = artist;
 		this.songName = songName;
-		this.albumCover = albumCover;
+		this.albumCoverUrl = albumCover;
 		this.duration = duration;
 		this.lyrics = lyrics;
 		this.version = version;
 		this.remarks = remarks;
 	}
 
-	public Drawable getAlbumCover() {
-		return albumCover;
+	public String getAlbumCoverUrl() {
+		return albumCoverUrl;
 	}
-	public void setAlbumCover(Drawable albumCover) {
-		this.albumCover = albumCover;
+	public void setAlbumCoverUrl(String albumCoverUrl) {
+		this.albumCoverUrl = albumCoverUrl;
 	}
 	public String getId() {
 		return id;
@@ -71,11 +71,11 @@ public class Song implements Serializable {
 	public void setSongName(String songName) {
 		this.songName = songName;
 	}
-	public Drawable getAlbumPicture() {
-		return albumCover;
+	public String getAlbumPicture() {
+		return albumCoverUrl;
 	}
-	public void setAlbumPicture(Drawable albumPicture) {
-		this.albumCover = albumPicture;
+	public void setAlbumPicture(String albumCoverUrl) {
+		this.albumCoverUrl = albumCoverUrl;
 	}
 	public String getDuration() {
 		return duration;

@@ -1,5 +1,7 @@
 package com.karaokeapp;
 
+import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
+
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,19 +19,20 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
 
-import com.karaokeapp.data.KaraokeContract.KaraokeSongsEntry;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class FragmentAllSongsByArtist extends Fragment implements DataManager
+public class FragmentSongsByArtist extends Fragment implements DataManager
         .dataIteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private GridAdapter mAdapter;
+
     private MenuItem mSearchItem;
 
-    private static final String TAG = FragmentAllSongsByArtist.class.getSimpleName();
+    public static final String TAG = FragmentSongsByArtist.class.getSimpleName();
+
     private ProgressDialog progressDialog;
+
     private GridView mGvSong;
 
     private static final int KARAOKE_SONGS_LOADER = 0;
@@ -37,18 +40,24 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(KARAOKE_SONGS_LOADER,null,this);
+        getLoaderManager().restartLoader(KARAOKE_SONGS_LOADER, null, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_all_songs_by_artist, container, false);
         mGvSong = (GridView) view.findViewById(R.id.gv_song);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+        }
+        super.onStop();
     }
 
     @Override
@@ -79,15 +88,15 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
 
     @Override
     public void dataLoaded(ArrayList<Song> songs) {
-        progressDialog.hide();
-        if(isAdded()) {
+        progressDialog.dismiss();
+        if (isAdded()) {
             mAdapter = new GridAdapter(getActivity(), songs, TAG);
             mGvSong.setAdapter(mAdapter);
             mGvSong.setOnItemClickListener(new GridView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
+                        int position, long id) {
                     Song choosedSong = (Song) mAdapter.getItem(position);
                     DialogFragmentSongDetails songFragment = DialogFragmentSongDetails
                             .getInstance(choosedSong);
@@ -101,6 +110,9 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
         // Sort order:  Ascending, by date.
 
         // Now create and return a CursorLoader that will take care of
@@ -120,10 +132,11 @@ public class FragmentAllSongsByArtist extends Fragment implements DataManager
         if (data != null && data.moveToFirst() && isAdded()) {
             DataManager.loadSongs(this, data);
         } else {
-            DataManager.loadSongList(getActivity(),this);
+            DataManager.loadSongList(getActivity(), this);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) { }
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 }

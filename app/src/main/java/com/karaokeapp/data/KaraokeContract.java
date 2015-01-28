@@ -49,6 +49,7 @@ public class KaraokeContract {
 
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_KARAOKE_SONGS;
+
         public static final String CONTENT_ITEM_TYPE =
                 "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_KARAOKE_SONGS;
 
@@ -56,12 +57,19 @@ public class KaraokeContract {
         public static final String TABLE_NAME = "KARAOKE_SONGS";
 
         public static final String COLUMN_SONG_ID = "SONG_ID";
+
         public static final String COLUMN_ARTIST_NAME = "ARTIST_NAME";
+
         public static final String COLUMN_SONG_NAME = "SONG_NAME";
+
         public static final String COLUMN_ALBUM_COVER_URL = "ALBUM_COVER_URL";
+
         public static final String COLUMN_DURATION = "DURATION";
+
         public static final String COLUMN_LYRICS_URL = "LYRICS_URL";
+
         public static final String COLUMN_VERSION = "VERSION";
+
         public static final String COLUMN_REMARKS = "REMARKS";
 
 

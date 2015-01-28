@@ -17,19 +17,23 @@ import java.util.Locale;
 
 @SuppressLint("NewApi")
 public class FragmentFavoritesSongs extends Fragment {
-	
-	private GridAdapter mAdapter;
-	private FragmentManager fragmentManager = getFragmentManager();
-	private MenuItem mSearchItem;
-	
-	private static final String TAG = FragmentFavoritesSongs.class.getSimpleName();
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setHasOptionsMenu(true);
-		View view = inflater.inflate(R.layout.fragment_favorites_songs, container, false);
-		GridView mGvSong = (GridView) view.findViewById(R.id.gv_favorites_songs);
+
+    private GridAdapter mAdapter;
+
+    private FragmentManager fragmentManager = getFragmentManager();
+
+    private MenuItem mSearchItem;
+
+    public static final String TAG = FragmentFavoritesSongs.class.getSimpleName();
+
+    private SearchView mSearchView;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        View view = inflater.inflate(R.layout.fragment_favorites_songs, container, false);
+        GridView mGvSong = (GridView) view.findViewById(R.id.gv_favorites_songs);
 //		mAdapter = new GridAdapter(view.getContext(), DataManager.loadSongList(view.getContext(),
 //                TAG), TAG);
 //		mGvSong.setAdapter(mAdapter);
@@ -49,29 +53,4 @@ public class FragmentFavoritesSongs extends Fragment {
 
         return view;
     }
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.activity_main_actions, menu);
-		
-		mSearchItem = menu.findItem(R.id.act_search);
-		SearchView searchView = (SearchView) menu.findItem(R.id.act_search).getActionView();
-
-		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
-			
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				return false;
-			}
-			
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				String searchText = newText.toLowerCase(Locale.getDefault());
-				mAdapter.filter(searchText);
-				return true;
-			}
-		};
-		searchView.setOnQueryTextListener(textChangeListener);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
 }
