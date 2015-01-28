@@ -25,6 +25,8 @@ import java.util.Locale;
 public class FragmentSongsByArtist extends Fragment implements DataManager
         .dataIteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String LAST_SAVED_POSITION = "LAST_SAVED_POSITION";
+
     private GridAdapter mAdapter;
 
     private MenuItem mSearchItem;
@@ -36,6 +38,8 @@ public class FragmentSongsByArtist extends Fragment implements DataManager
     private GridView mGvSong;
 
     private static final int KARAOKE_SONGS_LOADER = 0;
+
+    private int mSavedPosition = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +57,23 @@ public class FragmentSongsByArtist extends Fragment implements DataManager
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LAST_SAVED_POSITION, mGvSong.getFirstVisiblePosition());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore last state for checked position.
+            mSavedPosition = savedInstanceState.getInt(LAST_SAVED_POSITION, 0);
+        }
+    }
+
+    @Override
     public void onStop() {
-        if (progressDialog!=null){
+        if (progressDialog != null) {
             progressDialog.dismiss();
         }
         super.onStop();
@@ -92,6 +111,7 @@ public class FragmentSongsByArtist extends Fragment implements DataManager
         if (isAdded()) {
             mAdapter = new GridAdapter(getActivity(), songs, TAG);
             mGvSong.setAdapter(mAdapter);
+            mGvSong.smoothScrollToPosition(mSavedPosition);
             mGvSong.setOnItemClickListener(new GridView.OnItemClickListener() {
 
                 @Override
